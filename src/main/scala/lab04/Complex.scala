@@ -8,12 +8,20 @@ trait Complex {
 }
 
 object Complex {
-  def apply(re:Double, im:Double):Complex = ???
+  def apply(re:Double, im:Double): Complex = new ComplexImpl(re, im)
 
-  private class ComplexImpl(override val re: Double, override val im: Double) extends Complex{
-    override def +(c: Complex): Complex = ???
+  private class ComplexImpl( var re: Double, var im: Double) extends Complex{
 
-    override def *(c: Complex): Complex = ???
+    override def +(c: Complex): Complex = {
+      Complex(this.re+c.re, this.im+c.im)
+    }
+
+    override def *(c: Complex): Complex = {
+      Complex(this.re*c.re - this.im*c.im, this.re*c.im + this.im*c.re)
+    }
+
+    override def toString = "ComplexImpl(" + re + ", " + im + ")"
+
   }
 }
 
