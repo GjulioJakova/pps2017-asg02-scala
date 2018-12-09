@@ -29,11 +29,32 @@ object FunctionsImpl extends Functions {
 
   // private def combine[A]...{...}
 
-  override def sum(a: List[Double]): Double = ???  // combine(...)
+  override def sum(a: List[Double]): Double = {
+    var sum = 0.0
+    a.foreach(elem =>{
+      sum += elem
+    })
+    sum
+  }  // combine(...)
 
-  override def concat(a: Seq[String]): String = ??? // combine(...)
+  override def concat(a: Seq[String]): String = {
+    var string = ""
+    a.foreach(elem =>{
+      string += elem
+    })
+    string
+  } // combine(...)
 
-  override def max(a: List[Int]): Int = ??? // combine(...)
+  override def max(a: List[Int]): Int = {
+    if(a.isEmpty) Int.MinValue
+    else {
+      var max = a.head
+      a.foreach(elem => {
+        if (elem >= max) max = elem
+      })
+      max
+    }
+  } // combine(...)
 }
 
 object TryFunctions extends App {
