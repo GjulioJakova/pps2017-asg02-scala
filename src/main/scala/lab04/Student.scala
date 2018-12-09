@@ -7,19 +7,37 @@ trait Student {
   def courses: List[String] // names of course the student participates to
   def hasTeacher(teacher: String): Boolean // is the student participating to a course of this teacher?
 }
-
+/*
 trait Course {
   def name: String
   def teacher: String
-}
+}*/
 
 object Student {
-  def apply(name: String, year: Int = 2017):Student = ???
-}
+  def apply(name: String, year: Int = 2017):Student = new StudentImpl(name, year)
 
+  private class StudentImpl( val name: String, val year: Int = 2017) extends Student {
+
+    private var listCourses: List[Course] = List()
+
+    override def enrolling(course: Course): Unit =
+      listCourses = course :: listCourses
+
+    override def courses: List[String] =
+      listCourses.map(course => course.name)
+
+
+    override def hasTeacher(teacher: String): Boolean = ???
+
+  }
+
+}
+/*
 object Course {
   def apply(name: String, teacher: String):Course = ???
-}
+}*/
+
+case class Course(name: String, teacher: String)
 
 object Try extends App {
   val cPPS = Course("PPS","Viroli")
@@ -35,7 +53,7 @@ object Try extends App {
   s3.enrolling(cPCD)
   s3.enrolling(cSDR)
   println(s1.courses, s2.courses, s3.courses) // (Cons(PCD,Cons(PPS,Nil())),Cons(PPS,Nil()),Cons(SDR,Cons(PCD,Cons(PPS,Nil()))))
-  println(s1.hasTeacher("Ricci")) // true
+ // println(s1.hasTeacher("Ricci")) // true
 }
 
 /** Hints:
