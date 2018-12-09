@@ -26,8 +26,9 @@ object Student {
     override def courses: List[String] =
       listCourses.map(course => course.name)
 
+    override def hasTeacher(teacher: String): Boolean = 
+      listCourses.map(course => course.teacher).toSeq.contains(teacher)
 
-    override def hasTeacher(teacher: String): Boolean = ???
 
   }
 
@@ -53,7 +54,7 @@ object Try extends App {
   s3.enrolling(cPCD)
   s3.enrolling(cSDR)
   println(s1.courses, s2.courses, s3.courses) // (Cons(PCD,Cons(PPS,Nil())),Cons(PPS,Nil()),Cons(SDR,Cons(PCD,Cons(PPS,Nil()))))
- // println(s1.hasTeacher("Ricci")) // true
+  println(s1.hasTeacher("Ricci")) // true
 }
 
 /** Hints:
