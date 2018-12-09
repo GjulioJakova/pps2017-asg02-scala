@@ -4,6 +4,7 @@ trait Student {
   def name: String
   def year: Int
   def enrolling(course: Course): Unit // the student participates to a Course
+  def enrollings(courses: Course*): Unit // the student participates to a Course
   def courses: List[String] // names of course the student participates to
   def hasTeacher(teacher: String): Boolean // is the student participating to a course of this teacher?
 }
@@ -26,10 +27,14 @@ object Student {
     override def courses: List[String] =
       listCourses.map(course => course.name)
 
-    override def hasTeacher(teacher: String): Boolean = 
+    override def hasTeacher(teacher: String): Boolean =
       listCourses.map(course => course.teacher).toSeq.contains(teacher)
 
-
+    override def enrollings(courses: Course*): Unit = {
+      courses.foreach(course =>{
+        listCourses = course :: listCourses
+      })
+    }
   }
 
 }
@@ -47,12 +52,15 @@ object Try extends App {
   val s1 = Student("mario",2015)
   val s2 = Student("gino",2016)
   val s3 = Student("rino") //defaults to 2017
-  s1.enrolling(cPPS)
-  s1.enrolling(cPCD)
-  s2.enrolling(cPPS)
-  s3.enrolling(cPPS)
-  s3.enrolling(cPCD)
-  s3.enrolling(cSDR)
+  //s1.enrolling(cPPS)
+  //s1.enrolling(cPCD)
+  s1.enrollings(cPPS, cPCD)
+  //s2.enrolling(cPPS)
+  s2.enrollings(cPPS)
+  //s3.enrolling(cPPS)
+  //s3.enrolling(cPCD)
+  //s3.enrolling(cSDR)
+  s3.enrollings(cPPS, cPCD, cSDR)
   println(s1.courses, s2.courses, s3.courses) // (Cons(PCD,Cons(PPS,Nil())),Cons(PPS,Nil()),Cons(SDR,Cons(PCD,Cons(PPS,Nil()))))
   println(s1.hasTeacher("Ricci")) // true
 }
