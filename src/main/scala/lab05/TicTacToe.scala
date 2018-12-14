@@ -4,6 +4,9 @@ import scala.util.Random
 import scala.collection.mutable.ListBuffer
 
 object TicTacToe extends App {
+  final val MaxNumRows = 3
+  final val MaxNumColumns = 3
+
   sealed trait Player{
     def other: Player = this match {case X => O; case _ => X}
     override def toString: String = this match {case X => "X"; case _ => "O"}
@@ -30,7 +33,7 @@ object TicTacToe extends App {
         println()
       case _ :: t => placeAnyMark(board, player)
       case _ =>
-        boards += Mark(Random.nextInt(3),Random.nextInt(3),player)
+        boards += Mark(Random.nextInt(MaxNumRows),Random.nextInt(MaxNumColumns),player)
     }
     Seq(boards.toList)
   }
