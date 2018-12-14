@@ -24,38 +24,44 @@ trait Combiner[A] {
   def combine(a: A, b: A): A
 }
 
+object MonadImplicits{
+
+  implicit object IntegerCombiner extends Combiner[Int]{
+    override def unit: Int = Int.MinValue
+    override def combine(a: Int, b: Int): Int = math.max(a, b)
+  }
+
+  implicit object StringCombiner extends Combiner[String] {
+    override def unit: String = ""
+    override def combine(a: String, b: String): String = a.concat(b)
+  }
+
+  implicit object DoubleCombiner extends Combiner[Double] {
+    override def unit: Double = 0.0
+    override def combine(a: Double, b: Double): Double = a + b
+  }
+
+}
 
 object FunctionsImpl extends Functions {
 
-  // private def combine[A]...{...}
+    import MonadImplicits._
 
-  override def sum(a: List[Double]): Double = {
-    var sum = 0.0
-    a.foreach(elem =>{
-      sum += elem
-    })
-    sum
-  }  // combine(...)
-
-  override def concat(a: Seq[String]): String = {
-    var string = ""
-    a.foreach(elem =>{
-      string += elem
-    })
-    string
-  } // combine(...)
-
-  override def max(a: List[Int]): Int = {
-    if(a.isEmpty) Int.MinValue
-    else {
-      var max = a.head
-      a.foreach(elem => {
-        if (elem >= max) max = elem
+    private def combine[A](collection: List[A], combiner: Combiner[A]): A = {
+      var result: A = combiner.unit
+      collection.foreach( elem => {
+        result = combiner.combine(result,elem)
       })
-      max
+        result
     }
-  } // combine(...)
-}
+
+    override def sum(a: List[Double]): Double = combine(a, DoubleCombiner)
+
+    override def concat(a: Seq[String]): String = combine(a.toList, StringCombiner)
+
+    override def max(a: List[Int]): Int = combine(a, IntegerCombiner)
+
+  }
 
 object TryFunctions extends App {
   val f: Functions = FunctionsImpl
